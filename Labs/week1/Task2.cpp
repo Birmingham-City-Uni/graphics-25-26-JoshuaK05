@@ -1,10 +1,19 @@
 #include <iostream>
 #include <lodepng.h>
+#include <cmath>
+
+void setPixel(std::vector<uint8_t>& imgBuffer, int x, int y, int r, int g, int b, int a, int width, int height) {
+	int pixelIdx = (x + y * width) * 4;
+	imgBuffer[pixelIdx + 0] = r;
+	imgBuffer[pixelIdx + 1] = g;
+	imgBuffer[pixelIdx + 2] = b;
+	imgBuffer[pixelIdx + 3] = a;
+}
 
 
 int main()
 {
-	std::string inputFilename = "../images/stanford_bunny.png";
+	std::string inputFilename = "stanford_bunny.png";
 	std::string outputFilename = "output_bunny.png";
 
 	std::vector<uint8_t> imageBuffer;
@@ -14,6 +23,7 @@ int main()
 	// *** Tasks ***
 	// This code loads an image from a png file. This is an image of the famous 
 	// Stanford Bunny https://engineering.stanford.edu/magazine/tale-ubiquitous-stanford-bunny
+	//				  https://engineering.stanford.edu/news/tale-ubiquitous-stanford-bunny
 	// You'll need to load and manipulate images to add texturing to your rasteriser and raytracer.
 	// Let's try changing this image.
 	// If you'd like, you can use the setPixel function you wrote in the previous task.
@@ -23,8 +33,12 @@ int main()
 		for (int x = 0; x < width; ++x) 
 			for (int c = 0; c < 3; ++c) {
 				int pixelIdx = x + y * width;
-				imageBuffer[pixelIdx * 4 + c] *= 0.5;
+				imageBuffer[pixelIdx * 4 + c] = 255- imageBuffer[pixelIdx * 4 + c];
 			}
+	//for (int y = 0; y < height; ++y)
+	//	for (int x = 0; x < width; ++x) {
+	//		setPixel(imageBuffer, x, y, 0, 255, 255, 255, width, height);
+	//	}
 
 	// Once you have tested this code, comment out the for loops above and try the following tasks:
 	// * Task 1: Try making a *negative* of the input image. Pixels that are bright in the input
