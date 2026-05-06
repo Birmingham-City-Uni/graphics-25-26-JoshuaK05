@@ -64,38 +64,50 @@ int main(int argc, char* argv[]) {
 		lavender(178.f / 255.f, 164.f / 255.f, 212.f / 255.f);
 
 	// *** Load shaders and textures ***
-	std::vector<uint8_t> spotTexture;
+	std::vector<uint8_t> trackTexture;
+	std::vector<uint8_t> sandTexture;
 	unsigned int width, height;
-	lodepng::decode(spotTexture, width, height, "../models/spot.png");
+	lodepng::decode(trackTexture, width, height, "../../Models/Track.png");
+	TexturedLambertianShader trackShader(&trackTexture, width, height);
+	lodepng::decode(sandTexture, width, height, "../../Models/Sand.png");
+	TexturedLambertianShader sandShader(&sandTexture, width, height);
+
 
 	LambertianShader redLambertianShader(red);
 	PhongShader bluePlasticShader(blue, Eigen::Vector3f(1.f, 1.f, 1.f), 100.f);
 	LambertianShader aquaLambertianShader(aqua);
 	LambertianShader lavenderLambertianShader(lavender);
-	TexturedLambertianShader spotShader(&spotTexture, width, height);
 	MirrorShader mirrorShader;
 	TexCoordTestShader texCoordTestShader;
+	PhongShader coinShader(Eigen::Vector3f(0.6f, 0.4f, 0.02f), Eigen::Vector3f(0.6f, 0.4f, 0.02f), 100.f);
 
 	// *** Set up scene ***
 	Scene scene;
 
-	// Optional code: here's how to add the spot mesh to the scene, using a BVH
+	// Optional code: here's how to add the track mesh to the scene, using a BVH
 	// Try enabling this and comparing it to the non-BVH version below!
-	Model spotModel("../models/spot.obj");
-	scene.renderables.push_back(std::make_shared<BVHNode>(spotModel, &spotShader, 4, rotateY(M_PI / 4.0f)));
+	Model trackModel("../../Models/Track.obj");
+	//scene.renderables.push_back(std::make_shared<BVHNode>(trackModel, &trackShader, 5, rotateY(M_PI / 4.0f)));
+	//scene.renderables.push_back(std::make_shared<Mesh>(&trackShader, &trackModel));
+	//scene.renderables.back()->modelToWorld(rotateY(M_PI / 4.0f));
+	Model coinModel("../../Models/Coin.obj");
+	scene.renderables.push_back(std::make_shared<BVHNode>(coinModel, &coinShader, 5, rotateY(M_PI / 4.0f)));
+	Model sandModel("../../Models/Sand.obj");
+	scene.renderables.push_back(std::make_shared<BVHNode>(sandModel, &sandShader, 5, rotateY(M_PI / 4.0f)));
+
 
 	// Here's how to add the mesh without using the BVH.
 	// Try comparing performance to the BVH version above.
-	//Model spotModel("../models/spot.obj");
-	//scene.renderables.push_back(std::make_shared<Mesh>(&spotShader, &spotModel));
+	//Model trackModel("../models/track.obj");
+	//scene.renderables.push_back(std::make_shared<Mesh>(&trackShader, &trackModel));
 	//scene.renderables.back()->modelToWorld(rotateY(M_PI / 4.0f));
 
 	// *** Add lights to scene ***
-	Eigen::Vector3f ambientLight(.1f, .1f, .1f);
+	Eigen::Vector3f ambientLight(.2f, .2f, .2f);
 
 	std::vector<std::unique_ptr<Light>> lightSources;
-	lightSources.push_back(std::make_unique<PointLight>(Eigen::Vector3f(-1.f, 3.f, -1.f), 3.f * Eigen::Vector3f(1.f, 1.f, 1.f)));
-	lightSources.push_back(std::make_unique<DirectionalLight>(Eigen::Vector3f(0.f, -1.f, 1.f), .5f * Eigen::Vector3f(1.f, 1.f, 1.f)));
+	//lightSources.push_back(std::make_unique<PointLight>(Eigen::Vector3f(-1.f, 3.f, -1.f), 3.f * Eigen::Vector3f(1.f, 1.f, 1.f)));
+	lightSources.push_back(std::make_unique<DirectionalLight>(Eigen::Vector3f(0.f, -1.f, 0.f), 0.9f * Eigen::Vector3f(1.f, 1.f, 1.f)));
 
 	// *** Render the scene ***
 
