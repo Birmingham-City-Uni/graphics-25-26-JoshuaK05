@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 	// Try enabling this and comparing it to the non-BVH version below!
 	Model trackModel("../../Models/Track.obj");
 	//scene.renderables.push_back(std::make_shared<BVHNode>(trackModel, &trackShader, 5, rotateY(M_PI / 4.0f)));
-	//scene.renderables.push_back(std::make_shared<Mesh>(&trackShader, &trackModel));
+	scene.renderables.push_back(std::make_shared<Mesh>(&trackShader, &trackModel));
 	//scene.renderables.back()->modelToWorld(rotateY(M_PI / 4.0f));
 	Model coinModel("../../Models/Coin.obj");
 	scene.renderables.push_back(std::make_shared<BVHNode>(coinModel, &coinShader, 5, rotateY(M_PI / 4.0f)));
